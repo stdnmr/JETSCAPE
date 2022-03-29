@@ -114,10 +114,11 @@ void SmashWrapper::ExecuteTask() {
   // Every hydro event creates a new structure like jetscape_hadrons_
   // with as many events in it as one has samples per hydro
   modus->reset_event_numbering();
+  // TODO(stdnmr) Adapt SMASH new internal event_ counting
   modus->jetscape_hadrons_ = soft_particlization_sampler_->Hadron_list_;
   const int n_events = modus->jetscape_hadrons_.size();
   JSINFO << "SMASH: obtained " << n_events << " events from particlization";
-  smash::Particles *smash_particles = smash_experiment_->particles();
+  smash::Particles *smash_particles = smash_experiment_->first_ensemble();
   for (unsigned int i = 0; i < n_events; i++) {
     JSINFO << "Event " << i << " SMASH starts with "
            << modus->jetscape_hadrons_[i].size() << " particles.";
@@ -126,7 +127,7 @@ void SmashWrapper::ExecuteTask() {
       smash_experiment_->run_time_evolution();
     }
     smash_experiment_->do_final_decays();
-    smash_experiment_->final_output(i);
+    smash_experiment_->final_output();
     smash_particles_to_JS_hadrons(*smash_particles,
                                   modus->jetscape_hadrons_[i]);
     JSINFO << modus->jetscape_hadrons_[i].size() << " hadrons from SMASH.";
