@@ -92,11 +92,11 @@ void SmashWrapper::InitTask() {
       config.take({"Logging", "default"}, einhard::TRACE));
   smash::create_all_loggers(config["Logging"]);
   // Read in the rest of configuration
-  float end_time = GetXMLElementDouble({"Afterburner", "SMASH", "end_time"});
-  config["General"]["End_Time"] = end_time;
+  end_time_ = GetXMLElementDouble({"Afterburner", "SMASH", "end_time"});
+  config["General"]["End_Time"] = end_time_;
   only_final_decays_ =
       GetXMLElementInt({"Afterburner", "SMASH", "only_decays"});
-  JSINFO << "End time for SMASH is set to " << end_time << " fm/c";
+  JSINFO << "End time for SMASH is set to " << end_time_ << " fm/c";
   if (only_final_decays_) {
     JSINFO << "SMASH will only perform resonance decays, no propagation";
   }
@@ -124,7 +124,7 @@ void SmashWrapper::ExecuteTask() {
            << modus->jetscape_hadrons_[i].size() << " particles.";
     smash_experiment_->initialize_new_event();
     if (!only_final_decays_) {
-      smash_experiment_->run_time_evolution();
+      smash_experiment_->run_time_evolution(end_time_);
     }
     smash_experiment_->do_final_decays();
     smash_experiment_->final_output();
