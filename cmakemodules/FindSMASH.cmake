@@ -28,6 +28,17 @@ set(SMASH_LIBRARIES ${EINHARD_LIBRARY} ${CPPYAML_LIBRARY} ${SMASH_PYTHIA_LIBRARY
 
 message(STATUS "SMASH libraries: ${SMASH_LIBRARIES}")
 
+# At the moment a macro about the system endianness is needed from within SMASH
+include(TestBigEndian)
+TEST_BIG_ENDIAN(IS_BIG_ENDIAN)
+if(IS_BIG_ENDIAN)
+   message(STATUS "Big endian architecture detected.")
+   add_definitions("-DBIG_ENDIAN_ARCHITECTURE")
+else()
+   message(STATUS "Little endian architecture detected.")
+   add_definitions("-DLITTLE_ENDIAN_ARCHITECTURE")
+endif()
+
 set(SMASH_FOUND FALSE)
 if (SMASH_INCLUDE_DIR AND SMASH_LIBRARIES)
 #    SMASH_LIBRARY     AND
