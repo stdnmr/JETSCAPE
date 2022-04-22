@@ -19,6 +19,7 @@
 
 #include "JetScapeModuleBase.h"
 #include "SoftParticlization.h"
+#include "HadronizationManager.h"
 #include "sigslot.h"
 
 namespace Jetscape {
@@ -40,8 +41,12 @@ public:
   virtual void Exec();
 
 protected:
-  /// Pointer to particlization sampler, which provides initial hadrons
-  std::shared_ptr<SoftParticlization> soft_particlization_sampler_;
+  /// Gather all hadrons from soft particlization and fragmentation
+  std::vector<std::vector<std::shared_ptr<Hadron>>> GatherAfterburnerHadrons();
+  /// Get the events of soft particlization hadrons
+  std::vector<std::vector<std::shared_ptr<Hadron>>> GetSoftParticlizationHadrons();
+  /// Get the list of fragmentation hadrons
+  std::vector<std::shared_ptr<Hadron>> GetFragmentationHadrons();
 };
 
 } // end namespace Jetscape
